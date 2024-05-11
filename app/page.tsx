@@ -32,6 +32,11 @@ export default function Home() {
   const [modePostState, setModePostState] = useState(true);
   const [modalState, setModalState] = useState(false);
 
+  const handlePublishSave = (value: Post) => {
+    console.log(value);
+    const filteredPostState = postState.filter((post) => post !== value);
+    setPostState(filteredPostState);
+  };
   const handleModalSave = (value: Post) => {
     console.log(value);
     setPostState((prevState) => [value, ...prevState]);
@@ -111,6 +116,7 @@ export default function Home() {
               detail={post.content}
               date={post.created_at}
               id={post.id}
+              onPublishSave={() => handlePublishSave(post)}
             ></BlogCardDaft>
           ))}
       </div>

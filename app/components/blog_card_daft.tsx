@@ -6,11 +6,13 @@ export default function BlogCardDaft({
   detail,
   date,
   id,
+  onPublishSave,
 }: {
   title: string;
   detail: string;
   date: string;
   id: string;
+  onPublishSave: () => void;
 }) {
   const dateDisplay = (date: string) => {
     return format(new Date(date), "dd-MM-yyyy HH:mm");
@@ -23,16 +25,12 @@ export default function BlogCardDaft({
 
         {
           published: true,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
         }
       );
 
       if (response.status === 204) {
         console.log("success", response.data);
+        onPublishSave();
       }
     } catch (error) {
       console.log(error);
