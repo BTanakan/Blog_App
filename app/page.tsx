@@ -5,10 +5,13 @@ import BlogCardDaft from "./components/blog_card_daft";
 
 import { useState, useEffect } from "react";
 import { Post, PostResponse } from "./modal/post";
+import CreatePostModal from "./create_post";
+import Link from "next/link";
+import Modal from "./create_post";
 
 async function getBlogs() {
   const response = await axios.get(
-    "https://post-api.opensource-technology.com/api/posts"
+    "https://post-api.opensource-technology.com/api/posts/?limit=20"
   );
   if (response.status !== 200) return;
   const _data = response.data as PostResponse;
@@ -17,7 +20,7 @@ async function getBlogs() {
 
 async function getDaftPost() {
   const response = await axios.get(
-    "https://post-api.opensource-technology.com/api/posts/draft"
+    "https://post-api.opensource-technology.com/api/posts/draft/?limit=20"
   );
   if (response.status !== 200) return;
   const _data = response.data as PostResponse;
@@ -27,6 +30,12 @@ async function getDaftPost() {
 export default function Home() {
   const [postState, setPostState] = useState<Post[]>([]);
   const [modePostState, setModePostState] = useState(true);
+  const [modalState, setModalState] = useState(false);
+
+  const handleModalSave = (value: Post) => {
+    console.log(value);
+    setPostState((prevState) => [value, ...prevState]);
+  };
 
   const onDartMode = () => {
     setModePostState(false);
@@ -81,9 +90,8 @@ export default function Home() {
             Draft
           </button>
         </div>
-        <button className="border px-4 bg-blue-300 text-lg">
-          Create Draft
-        </button>
+
+        <button onClick={() => setModalState(true)}>Create Draft</button>
       </div>
       <div className="mt-4 space-y-4">
         {modePostState &&
@@ -102,9 +110,15 @@ export default function Home() {
               title={post.title}
               detail={post.content}
               date={post.created_at}
+              id={post.id}
             ></BlogCardDaft>
           ))}
-        {/* <BlogCardDaft></BlogCardDaft> */}
+      </div>
+
+      <div>
+        {modalState && (
+          <Modal onSave={handleModalSave} setModalState={setModalState}></Modal>
+        )}
       </div>
     </div>
   );
