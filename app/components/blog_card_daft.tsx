@@ -45,6 +45,7 @@ export default function BlogCardDaft({
 
       if (response.status === 204) {
         console.log("success", response.data);
+        onPublishSave();
       }
     } catch (error) {
       console.log(error);
