@@ -61,6 +61,11 @@ export default function Home() {
     }
   };
 
+  const onHandleDelete = async (postId: string) => {
+    const filteredPostState = postState.filter((post) => post.id !== postId);
+    setPostState(filteredPostState);
+  };
+
   const initBlog = async () => {
     try {
       const result = await getBlogs();
@@ -102,6 +107,8 @@ export default function Home() {
         {modePostState &&
           postState.map((post, index) => (
             <BlogCard
+              onDelete={() => onHandleDelete(post.id)}
+              id={post.id}
               key={index}
               title={post.title}
               detail={post.content}
